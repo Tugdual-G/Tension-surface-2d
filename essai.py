@@ -30,6 +30,8 @@ P[8:10,8] = 0
 
 
 # Calcul de la tension:
+# Il vaudrait mieux prendre en compte la courbure 
+# pour avoir une force nulle sur les lignes droites.
 T_i[1:-1,:] = f*(P[2:,:] - P[:-2,:])
 T_j[:,1:-1] = f*(P[:,2:] - P[:,:-2])
 # On suprime la tension pour les points n'appartenants pas au liquide:
