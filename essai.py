@@ -26,27 +26,42 @@ P[5:15,8:12] = 1
 P[8:13,12] = 1
 P[9:12,13] = 1
 P[10,14] = 1
-P[8:10,8] = 0
-
+P[8:12,8] = 0
+P[9:11,9] = 0
 
 # Calcul de la tension:
 """ Il vaudrait mieux prendre en compte la courbure 
 pour avoir une force nulle sur les lignes droites.
 Ici on ne calcule en fait que l'orientation de la surface,
-(tournée vers l'intérieur), il faudrait calculer et moyenner
-la variation de cette direction.
+il faudrait calculer et moyenner la variation de cette direction.
 """
 
-T_i[1:-1,:] = f*(P[2:,:] - P[:-2,:])
-T_j[:,1:-1] = f*(P[:,2:] - P[:,:-2])
+T_i[1:-1,:] = f*(P[:-2,:]-P[2:,:])
+T_j[:,1:-1] = f*(P[:,:-2]-P[:,2:])
+
+
+"""On peut essayer de prendre en compte les éléments 
+qui se trouvent sur les diagonnales: """
+T_i[1:-1,1:-1] += -f*(P[2:,2:]-P[:-2,:-2])
+T_j[1:-1,1:-1] += -f*(P[2:,2:]-P[:-2,:-2])
+T_j[1:-1,1:-1] += -f*(P[:-2,2:]-P[2:,:-2])
+T_i[1:-1,1:-1] -= -f*(P[:-2,2:]-P[2:,:-2])
+
 # On suprime la tension pour les points n'appartenants pas au liquide:
 T_i = T_i*P
 T_j = T_j*P
 
+# Normalisation
+norm = np.sqrt(T_i**2 + T_j**2)
+norm[norm == 0] = 1e-9
+
+T_i = T_i/norm
+T_j = T_j/norm
+
 
 # Affichage:
-plt.figure('test', dpi = 100)
+plt.figure('test', figsize = (5,5))
 plt.clf()
 plt.pcolormesh(X, Y, P, shading = 'nearest')
-plt.quiver(X, Y, T_j,T_i, scale = 80 )
+plt.quiver(X, Y, T_j,T_i, scale = 15 )
 plt.show()
