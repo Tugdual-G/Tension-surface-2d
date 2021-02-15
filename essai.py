@@ -49,10 +49,10 @@ T_i[1:-1,1:-1] -= P[2:,:-2]-P[:-2,2:]
 T_i = T_i*P
 T_j = T_j*P
 
-# Normalisation
+# Normalisation:
 norm = np.sqrt(T_i**2 + T_j**2)
 # On peut mettre n'importe quel nombre,1 par exemple,
-# afin d'éviter l'erreur division par 0.
+# afin d'éviter l'erreur division par 0:
 norm[norm == 0] = 1
 
 T_i = T_i/norm
