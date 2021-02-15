@@ -45,7 +45,7 @@ T_j[1:-1,1:-1] += P[:-2,:-2]-P[2:,2:]
 T_j[1:-1,1:-1] += P[2:,:-2]-P[:-2,2:]
 T_i[1:-1,1:-1] -= P[2:,:-2]-P[:-2,2:]
 
-# On suprime la tension pour les points n'appartenants pas au liquide:
+# On supprime la tension pour les points n'appartenants pas au liquide:
 T_i = T_i*P
 T_j = T_j*P
 
