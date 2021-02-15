@@ -18,8 +18,6 @@ P = np.zeros((qi,qj))
 T_i = np.zeros((qi,qj)) 
 T_j = np.zeros((qi,qj))
 
-# facteur de force arbitraire:
-f = 2
 
 # Création du liquide:
 P[5:15,8:12] = 1
@@ -36,16 +34,16 @@ Ici on ne calcule en fait que l'orientation de la surface,
 il faudrait calculer et moyenner la variation de cette direction.
 """
 
-T_i[1:-1,:] = f*(P[:-2,:]-P[2:,:])
-T_j[:,1:-1] = f*(P[:,:-2]-P[:,2:])
+T_i[1:-1,:] = P[:-2,:]-P[2:,:]
+T_j[:,1:-1] = P[:,:-2]-P[:,2:]
 
 
 """On peut essayer de prendre en compte les éléments 
-qui se trouvent sur les diagonnales: """
-T_i[1:-1,1:-1] += -f*(P[2:,2:]-P[:-2,:-2])
-T_j[1:-1,1:-1] += -f*(P[2:,2:]-P[:-2,:-2])
-T_j[1:-1,1:-1] += -f*(P[:-2,2:]-P[2:,:-2])
-T_i[1:-1,1:-1] -= -f*(P[:-2,2:]-P[2:,:-2])
+qui se trouvent sur la diagonnale: """
+T_i[1:-1,1:-1] += P[:-2,:-2]-P[2:,2:]
+T_j[1:-1,1:-1] += P[:-2,:-2]-P[2:,2:]
+T_j[1:-1,1:-1] += P[2:,:-2]-P[:-2,2:]
+T_i[1:-1,1:-1] -= P[2:,:-2]-P[:-2,2:]
 
 # On suprime la tension pour les points n'appartenants pas au liquide:
 T_i = T_i*P
